@@ -44,10 +44,6 @@ function getPipeline(scope: Stack): Pipeline {
           ],
         },
       },
-      artifacts: {
-        "base-directory": "packages/infrastructure/cdk.out",
-        files: "**/*",
-      },
     }),
     environment: {
       computeType: ComputeType.SMALL,
@@ -71,7 +67,7 @@ function getPipeline(scope: Stack): Pipeline {
           commands: [
             "yarn install",
             "yarn build",
-            "cp -r node_modules packages/application/dist/lambda/",
+            "mkdir -p packages/application/dist/lambda/node_modules/openai/ && cp -r node_modules/openai/ packages/application/dist/lambda/node_modules/",
             "yarn cdk synth",
           ],
         },
