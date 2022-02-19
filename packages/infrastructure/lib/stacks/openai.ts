@@ -20,9 +20,8 @@ export class OpenAIStack extends Stack {
       handler: 'index.handler',
       code: Code.fromAsset(path.join(__dirname, '../lambda')),
       environment: {
-        "OPENAI_API_KEY": StringParameter.fromSecureStringParameterAttributes(this, "api", {
+        "OPENAI_API_KEY": StringParameter.fromStringParameterAttributes(this, "api", {
           parameterName: "OPEN_AI_API_KEY",
-          version:1
         }).stringValue
       }
     });
