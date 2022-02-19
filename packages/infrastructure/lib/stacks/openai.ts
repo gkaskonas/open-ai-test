@@ -17,7 +17,7 @@ export class OpenAIStack extends Stack {
 
      new Function(this, 'MyFunction', {
       runtime: Runtime.NODEJS_14_X,
-      handler: 'index.handler',
+      handler: 'handler.handler',
       code: Code.fromAsset(path.join(__dirname, '../lambda')),
       environment: {
         "OPENAI_API_KEY": StringParameter.fromStringParameterAttributes(this, "api", {

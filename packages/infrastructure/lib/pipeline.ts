@@ -26,7 +26,7 @@ function getPipeline(scope: Stack): CodePipeline {
       }),
 
       // Install dependencies, build and run cdk synth
-      commands: ["yarn install", "yarn build", "yarn cdk synth"],
+      commands: ["yarn install", "yarn build", "cp -r node_modules packages/infrastructure/lib/lambda/", "yarn cdk synth"],
       primaryOutputDirectory: "packages/infrastructure/cdk.out",
     }),
     crossAccountKeys: true,

@@ -1,6 +1,6 @@
-# Personal website and API + Pipeline with AWS CDK
+# OPEN AI on lambda
 
-This Repo contains all the code for my personal website written in ReactJS and deployed using AWS CDK
+OpenAI on lambda using cdk pipelines
 
 ## Requires Lerna and Yarn
 
