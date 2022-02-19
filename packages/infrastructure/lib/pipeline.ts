@@ -131,7 +131,7 @@ function getPipeline(scope: Stack): Pipeline {
         role: Role.fromRoleArn(
           scope,
           "executeRole",
-          "arn:aws:iam::404319983256:role/cdk-hnb659fds-cfn-exec-role-404319983256-eu-west-1"
+          "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1"
         ),
       }),
     ],
