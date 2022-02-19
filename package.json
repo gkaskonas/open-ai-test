@@ -16,14 +16,12 @@
   "workspaces": [
     "packages/*"
   ],
-  "devDependencies": {
-    "lerna": "4.0.0",
-    "rimraf": "3.0.2"
-  },
   "resolutions": {
     "table": "6.7.5"
   },
   "dependencies": {
-    "cdk": "2.0.0"
+    "aws-cdk-lib": "2.13.0",
+    "lerna": "4.0.0",
+    "rimraf": "3.0.2"
   }
 }

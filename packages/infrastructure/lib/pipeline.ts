@@ -39,7 +39,7 @@ function getPipeline(scope: Stack): Pipeline {
             "yarn install",
             "yarn build",
             "yarn cdk synth",
-            "yarn cdk deploy --require-approval never --verbose",
+            "yarn cdk deploy ai-pipeline-v2 --require-approval never --verbose",
           ],
         },
       },
@@ -110,7 +110,7 @@ function getPipeline(scope: Stack): Pipeline {
         changeSetName,
         stackName,
         templatePath: sourceOutput.atPath(
-          "packages/infrastructure/cdk.out/assembly-ai-pipeline-webDev/aipipelinewebDevopenai720CBD04.template.json"
+          "packages/infrastructure/cdk.out/ai-infra.template.json"
         ),
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
@@ -142,6 +142,7 @@ function getPipeline(scope: Stack): Pipeline {
       }),
     ],
   });
+
 
   return pipeline;
 }

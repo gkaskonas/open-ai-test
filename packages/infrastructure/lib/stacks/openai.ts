@@ -8,9 +8,6 @@ import { StringParameter } from "aws-cdk-lib/aws-ssm";
  * A stack for our simple Lambda-powered web service
  */
 export class OpenAIStack extends Stack {
-  /**
-   * The URL of the API Gateway endpoint, for use in the integ tests
-   */
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
