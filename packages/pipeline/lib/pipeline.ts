@@ -68,7 +68,7 @@ function getPipeline(scope: Stack): Pipeline {
             "yarn install",
             "yarn build",
             "mkdir -p packages/application/dist/lambda/node_modules/openai/ && cp -r node_modules/openai/ packages/application/dist/lambda/node_modules/",
-            "yarn cdk synth",
+            "cd packages/application/ && yarn cdk synth",
           ],
         },
       },
@@ -150,7 +150,7 @@ function getPipeline(scope: Stack): Pipeline {
         changeSetName,
         stackName,
         templatePath: buildOutput.atPath(
-          "packages/infrastructure/cdk.out/ai-infra.template.json"
+          "packages/application/cdk.out/ai-infra.template.json"
         ),
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
