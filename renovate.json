@@ -1,0 +1,20 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:js-lib", ":semanticCommitTypeAll(ci)", ":label(dependencies)"],
+    "separateMajorMinor": true,
+    "packageRules": [
+      {
+        "packagePatterns": ["^eslint"],
+        "packageNames": ["@typescript-eslint/eslint-plugin", "prettier", "jest", "ts-jest"],
+        "groupName": "testing"
+      },
+      {
+        "packagePatterns": ["^@types/"],
+        "groupName": "types"
+      },
+      {
+        "allowedVersions": "<=16",
+        "packageNames": ["@types/node"]
+      }
+    ]
+  }

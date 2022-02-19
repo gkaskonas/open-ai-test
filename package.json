@@ -1,0 +1,29 @@
+{
+  "name": "openai-cdk",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rimraf packages/infrastructure/dist/ && lerna run build",
+    "clean": "lerna run clean",
+    "install": "lerna run install",
+    "watch": "lerna run watch --stream",
+    "test": "lerna run test --",
+    "cdk": "yarn --cwd packages/infrastructure cdk",
+    "deploy": "yarn build && yarn cdk synth && yarn cdk deploy --require-approval never",
+    "dev": "yarn --cwd packages/application dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "4.0.0",
+    "rimraf": "3.0.2"
+  },
+  "resolutions": {
+    "table": "6.7.5"
+  },
+  "dependencies": {
+    "cdk": "2.0.0"
+  }
+}
