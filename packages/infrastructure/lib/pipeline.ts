@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 
-import { SecretValue, Stack, StackProps } from "aws-cdk-lib";
+import { CfnCapabilities, SecretValue, Stack, StackProps } from "aws-cdk-lib";
 import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline";
 import {
   CloudFormationCreateReplaceChangeSetAction,
@@ -39,7 +39,7 @@ function getPipeline(scope: Stack): Pipeline {
             "yarn install",
             "yarn build",
             "yarn cdk synth",
-            "yarn cdk deploy ",
+            "yarn cdk deploy --require-approval never --verbose",
           ],
         },
       },
@@ -52,6 +52,8 @@ function getPipeline(scope: Stack): Pipeline {
       computeType: ComputeType.SMALL,
       buildImage: LinuxBuildImage.STANDARD_5_0,
     },
+    role: Role.fromRoleArn(scope, "pipelineRole", "arn:aws:iam::269065460843:role/portfolioPipeline-PipelineUpdatePipelineSelfMutati-VUFYWAW94ECJ")
+  
   });
 
   const stackName = "openai";
@@ -102,8 +104,8 @@ function getPipeline(scope: Stack): Pipeline {
     stageName: "deployDev",
     actions: [
       new CloudFormationCreateReplaceChangeSetAction({
-        actionName: "deployDev",
-        adminPermissions: true,
+        actionName: "Prepare",
+        adminPermissions: false,
         changeSetName,
         stackName,
         templatePath: sourceOutput.atPath(
@@ -112,10 +114,11 @@ function getPipeline(scope: Stack): Pipeline {
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
         runOrder: 1,
+        cfnCapabilities: [CfnCapabilities.NAMED_IAM, CfnCapabilities.AUTO_EXPAND],
         role: Role.fromRoleArn(
           scope,
-          "deployRole",
-          "arn:aws:iam::404319983256:role/cdk-hnb659fds-cfn-exec-role-404319983256-eu-west-1"
+          "changeSetRole",
+          "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1"
         ),
       }),
       new CloudFormationExecuteChangeSetAction({
@@ -128,10 +131,7 @@ function getPipeline(scope: Stack): Pipeline {
         role: Role.fromRoleArn(
           scope,
           "executeRole",
-          "arn:aws:iam::404319983256:role/cdk-hnb659fds-cfn-exec-role-404319983256-eu-west-1",
-          {
-            mutable: true
-          }
+          "arn:aws:iam::404319983256:role/cdk-hnb659fds-cfn-exec-role-404319983256-eu-west-1"
         ),
       }),
     ],
