@@ -150,7 +150,7 @@ function getPipeline(scope: Stack): Pipeline {
         changeSetName,
         stackName,
         templatePath: buildOutput.atPath(
-          "packages/application/cdk.out/ai-infra.template.json"
+          "packages/application/cdk.out/ai-app.template.json"
         ),
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
