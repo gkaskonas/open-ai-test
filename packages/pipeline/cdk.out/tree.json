@@ -1,0 +1,1217 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.0.10"
+        }
+      },
+      "ai-pipeline-v2": {
+        "id": "ai-pipeline-v2",
+        "path": "ai-pipeline-v2",
+        "children": {
+          "pipelineRole": {
+            "id": "pipelineRole",
+            "path": "ai-pipeline-v2/pipelineRole",
+            "children": {
+              "Policy": {
+                "id": "Policy",
+                "path": "ai-pipeline-v2/pipelineRole/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ai-pipeline-v2/pipelineRole/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:eu-west-1:269065460843:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "buildB0080CFE"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":logs:eu-west-1:269065460843:log-group:/aws/codebuild/",
+                                      {
+                                        "Ref": "buildB0080CFE"
+                                      },
+                                      ":*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "codebuild:CreateReportGroup",
+                                "codebuild:CreateReport",
+                                "codebuild:UpdateReport",
+                                "codebuild:BatchPutTestCases",
+                                "codebuild:BatchPutCodeCoverages"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":codebuild:eu-west-1:269065460843:report-group/",
+                                    {
+                                      "Ref": "buildB0080CFE"
+                                    },
+                                    "-*"
+                                  ]
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                            },
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:Encrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "pipelineRolePolicy7F41F05F",
+                        "roles": [
+                          "portfolioPipeline-PipelineUpdatePipelineSelfMutati-VUFYWAW94ECJ"
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.13.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.13.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "build": {
+            "id": "build",
+            "path": "ai-pipeline-v2/build",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ai-pipeline-v2/build/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "CODEPIPELINE"
+                    },
+                    "environment": {
+                      "type": "LINUX_CONTAINER",
+                      "image": "aws/codebuild/standard:5.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": false,
+                      "computeType": "BUILD_GENERAL1_SMALL"
+                    },
+                    "serviceRole": "arn:aws:iam::269065460843:role/portfolioPipeline-PipelineUpdatePipelineSelfMutati-VUFYWAW94ECJ",
+                    "source": {
+                      "type": "CODEPIPELINE",
+                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g aws-cdk\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"yarn install\",\n        \"yarn build\",\n        \"yarn cdk synth\",\n        \"yarn cdk deploy ai-pipeline-v2 --require-approval never --verbose\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"packages/infrastructure/cdk.out\",\n    \"files\": \"**/*\"\n  }\n}"
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.13.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.PipelineProject",
+              "version": "2.13.0"
+            }
+          },
+          "buildApp": {
+            "id": "buildApp",
+            "path": "ai-pipeline-v2/buildApp",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "ai-pipeline-v2/buildApp/Role",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ai-pipeline-v2/buildApp/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codebuild.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.13.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ai-pipeline-v2/buildApp/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ai-pipeline-v2/buildApp/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:eu-west-1:269065460843:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "buildApp6A347750"
+                                          }
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:eu-west-1:269065460843:log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "buildApp6A347750"
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "codebuild:CreateReportGroup",
+                                    "codebuild:CreateReport",
+                                    "codebuild:UpdateReport",
+                                    "codebuild:BatchPutTestCases",
+                                    "codebuild:BatchPutCodeCoverages"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":codebuild:eu-west-1:269065460843:report-group/",
+                                        {
+                                          "Ref": "buildApp6A347750"
+                                        },
+                                        "-*"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1"
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "buildAppRoleDefaultPolicy0F952CDB",
+                            "roles": [
+                              {
+                                "Ref": "buildAppRoleB3554AFA"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.13.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.13.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.13.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ai-pipeline-v2/buildApp/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "CODEPIPELINE"
+                    },
+                    "environment": {
+                      "type": "LINUX_CONTAINER",
+                      "image": "aws/codebuild/standard:5.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": false,
+                      "computeType": "BUILD_GENERAL1_SMALL"
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "buildAppRoleB3554AFA",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "CODEPIPELINE",
+                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g aws-cdk\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"yarn install\",\n        \"yarn build\",\n        \"yarn cdk synth\",\n        \"cp -r node_modules packages/application/dist/lambda/\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"packages/**/**\",\n    \"files\": \"**/*\"\n  }\n}"
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.13.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.PipelineProject",
+              "version": "2.13.0"
+            }
+          },
+          "key": {
+            "id": "key",
+            "path": "ai-pipeline-v2/key",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "artifacts": {
+            "id": "artifacts",
+            "path": "ai-pipeline-v2/artifacts",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+              "version": "2.13.0"
+            }
+          },
+          "Pipeline": {
+            "id": "Pipeline",
+            "path": "ai-pipeline-v2/Pipeline",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "ai-pipeline-v2/Pipeline/Role",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ai-pipeline-v2/Pipeline/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codepipeline.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.13.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ai-pipeline-v2/Pipeline/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ai-pipeline-v2/Pipeline/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1"
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "PipelineSelfMutatebuildCodePipelineActionRole1BA0283F",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "PipelinebuildAppbuildCodePipelineActionRoleF68FFA74",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "PipelineRoleDefaultPolicyC7A05455",
+                            "roles": [
+                              {
+                                "Ref": "PipelineRoleD68726F7"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.13.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.13.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.13.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ai-pipeline-v2/Pipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "PipelineRoleD68726F7",
+                        "Arn"
+                      ]
+                    },
+                    "stages": [
+                      {
+                        "name": "Source",
+                        "actions": [
+                          {
+                            "name": "GitHub_Source",
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Source",
+                              "version": "1",
+                              "owner": "ThirdParty",
+                              "provider": "GitHub"
+                            },
+                            "configuration": {
+                              "Owner": "gkaskonas",
+                              "Repo": "open-ai-test",
+                              "Branch": "main",
+                              "OAuthToken": "{{resolve:secretsmanager:github-access:SecretString:::}}",
+                              "PollForSourceChanges": false
+                            },
+                            "runOrder": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "SelfMutate",
+                        "actions": [
+                          {
+                            "name": "build",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "buildB0080CFE"
+                              }
+                            },
+                            "runOrder": 2,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelineSelfMutatebuildCodePipelineActionRole1BA0283F",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "buildApp",
+                        "actions": [
+                          {
+                            "name": "build",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_Source_GitHub_Source"
+                              }
+                            ],
+                            "outputArtifacts": [
+                              {
+                                "name": "Artifact_buildApp_build"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "buildApp6A347750"
+                              }
+                            },
+                            "runOrder": 2,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelinebuildAppbuildCodePipelineActionRoleF68FFA74",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "deployDev",
+                        "actions": [
+                          {
+                            "name": "Prepare",
+                            "inputArtifacts": [
+                              {
+                                "name": "Artifact_buildApp_build"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Deploy",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CloudFormation"
+                            },
+                            "configuration": {
+                              "StackName": "openai",
+                              "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                              "RoleArn": "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1",
+                              "ActionMode": "CHANGE_SET_REPLACE",
+                              "ChangeSetName": "StagedChangeSet",
+                              "TemplatePath": "Artifact_buildApp_build::packages/infrastructure/cdk.out/ai-infra.template.json"
+                            },
+                            "runOrder": 1,
+                            "roleArn": "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1",
+                            "region": "eu-west-1"
+                          },
+                          {
+                            "name": "execute",
+                            "actionTypeId": {
+                              "category": "Deploy",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CloudFormation"
+                            },
+                            "configuration": {
+                              "StackName": "openai",
+                              "ActionMode": "CHANGE_SET_EXECUTE",
+                              "ChangeSetName": "StagedChangeSet"
+                            },
+                            "runOrder": 2,
+                            "roleArn": "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1",
+                            "region": "eu-west-1"
+                          }
+                        ]
+                      }
+                    ],
+                    "artifactStores": [
+                      {
+                        "region": "eu-west-1",
+                        "artifactStore": {
+                          "type": "S3",
+                          "location": "portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1",
+                          "encryptionKey": {
+                            "type": "KMS",
+                            "id": "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de"
+                          }
+                        }
+                      }
+                    ],
+                    "name": "openai-pipeline",
+                    "restartExecutionOnUpdate": true
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                  "version": "2.13.0"
+                }
+              },
+              "Source": {
+                "id": "Source",
+                "path": "ai-pipeline-v2/Pipeline/Source",
+                "children": {
+                  "GitHub_Source": {
+                    "id": "GitHub_Source",
+                    "path": "ai-pipeline-v2/Pipeline/Source/GitHub_Source",
+                    "children": {
+                      "WebhookResource": {
+                        "id": "WebhookResource",
+                        "path": "ai-pipeline-v2/Pipeline/Source/GitHub_Source/WebhookResource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                          "aws:cdk:cloudformation:props": {
+                            "authentication": "GITHUB_HMAC",
+                            "authenticationConfiguration": {
+                              "secretToken": "{{resolve:secretsmanager:github-access:SecretString:::}}"
+                            },
+                            "filters": [
+                              {
+                                "jsonPath": "$.ref",
+                                "matchEquals": "refs/heads/{Branch}"
+                              }
+                            ],
+                            "targetAction": "GitHub_Source",
+                            "targetPipeline": {
+                              "Ref": "PipelineC660917D"
+                            },
+                            "targetPipelineVersion": 1,
+                            "registerWithThirdParty": true
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                          "version": "2.13.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.10"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              },
+              "SelfMutate": {
+                "id": "SelfMutate",
+                "path": "ai-pipeline-v2/Pipeline/SelfMutate",
+                "children": {
+                  "build": {
+                    "id": "build",
+                    "path": "ai-pipeline-v2/Pipeline/SelfMutate/build",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "ai-pipeline-v2/Pipeline/SelfMutate/build/CodePipelineActionRole",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ai-pipeline-v2/Pipeline/SelfMutate/build/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::269065460843:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.13.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "ai-pipeline-v2/Pipeline/SelfMutate/build/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ai-pipeline-v2/Pipeline/SelfMutate/build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "buildB0080CFE",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelineSelfMutatebuildCodePipelineActionRoleDefaultPolicyE9EA0952",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelineSelfMutatebuildCodePipelineActionRole1BA0283F"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.13.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.13.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.13.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.10"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              },
+              "buildApp": {
+                "id": "buildApp",
+                "path": "ai-pipeline-v2/Pipeline/buildApp",
+                "children": {
+                  "build": {
+                    "id": "build",
+                    "path": "ai-pipeline-v2/Pipeline/buildApp/build",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "ai-pipeline-v2/Pipeline/buildApp/build/CodePipelineActionRole",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ai-pipeline-v2/Pipeline/buildApp/build/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::269065460843:root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.13.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "ai-pipeline-v2/Pipeline/buildApp/build/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ai-pipeline-v2/Pipeline/buildApp/build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "buildApp6A347750",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelinebuildAppbuildCodePipelineActionRoleDefaultPolicy429382BC",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelinebuildAppbuildCodePipelineActionRoleF68FFA74"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.13.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.13.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.13.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.10"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              },
+              "deployDev": {
+                "id": "deployDev",
+                "path": "ai-pipeline-v2/Pipeline/deployDev",
+                "children": {
+                  "Prepare": {
+                    "id": "Prepare",
+                    "path": "ai-pipeline-v2/Pipeline/deployDev/Prepare",
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.10"
+                    }
+                  },
+                  "execute": {
+                    "id": "execute",
+                    "path": "ai-pipeline-v2/Pipeline/deployDev/execute",
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.10"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+              "version": "2.13.0"
+            }
+          },
+          "changeSetRole": {
+            "id": "changeSetRole",
+            "path": "ai-pipeline-v2/changeSetRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "ImmutableRolechangeSetRole": {
+            "id": "ImmutableRolechangeSetRole",
+            "path": "ai-pipeline-v2/ImmutableRolechangeSetRole",
+            "children": {
+              "8389e75f-0810-4838-bf64-d6f85a95cf83": {
+                "id": "8389e75f-0810-4838-bf64-d6f85a95cf83",
+                "path": "ai-pipeline-v2/ImmutableRolechangeSetRole/8389e75f-0810-4838-bf64-d6f85a95cf83",
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "csDeployRole": {
+            "id": "csDeployRole",
+            "path": "ai-pipeline-v2/csDeployRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "ImmutableRolecsDeployRole": {
+            "id": "ImmutableRolecsDeployRole",
+            "path": "ai-pipeline-v2/ImmutableRolecsDeployRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "executeRole": {
+            "id": "executeRole",
+            "path": "ai-pipeline-v2/executeRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "ImmutableRoleexecuteRole": {
+            "id": "ImmutableRoleexecuteRole",
+            "path": "ai-pipeline-v2/ImmutableRoleexecuteRole",
+            "children": {
+              "8389e75f-0810-4838-bf64-d6f85a95cf83": {
+                "id": "8389e75f-0810-4838-bf64-d6f85a95cf83",
+                "path": "ai-pipeline-v2/ImmutableRoleexecuteRole/8389e75f-0810-4838-bf64-d6f85a95cf83",
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.10"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.13.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "ai-pipeline-v2/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "ai-pipeline-v2/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.13.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.0.10"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.13.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.13.0"
+    }
+  }
+}

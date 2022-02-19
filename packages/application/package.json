@@ -1,9 +1,6 @@
 {
-  "name": "infrastructure",
+  "name": "application",
   "version": "0.1.0",
-  "bin": {
-    "infrastructure": "bin/portfolio-website.js"
-  },
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",

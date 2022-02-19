@@ -1,0 +1,70 @@
+Arguments: 
+  /home/toasty/.nvm/versions/node/v14.19.0/bin/node /home/toasty/.nvm/versions/node/v14.19.0/bin/yarn install --cwd packages/infrastructure --production
+
+PATH: 
+  /home/toasty/.nvm/versions/node/v14.19.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  14.19.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/toasty/Documents/work/open-ai-test/packages/infrastructure/package.json: Unexpected token } in JSON at position 687
+      at JSON.parse (<anonymous>)
+      at /home/toasty/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/home/toasty/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /home/toasty/.nvm/versions/node/v14.19.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "infrastructure",
+    "version": "0.1.0",
+    "bin": {
+      "infrastructure": "bin/portfolio-website.js"
+    },
+    "scripts": {
+      "build": "tsc --build",
+      "clean": "tsc --build --clean",
+      "watch": "tsc -w",
+      "test": "jest",
+      "cdk": "cdk"
+    },
+    "devDependencies": {
+      "@types/jest": "27.0.3",
+      "@types/node": "16.11.12",
+      "@typescript-eslint/eslint-plugin": "5.4.0",
+      "@typescript-eslint/parser": "5.3.1",
+      "aws-cdk": "2.13.0",
+      "eslint": "8.2.0",
+      "eslint-config-prettier": "8.3.0",
+      "eslint-plugin-prettier": "4.0.0",
+      "jest": "27.3.1",
+      "prettier": "2.5.1",
+      "ts-jest": "27.0.7",
+      "ts-node": "10.4.0",
+      "typescript": "4.4.4",
+    },
+    "dependencies": {
+      "aws-sdk": "2.1027.0",
+      "aws-cdk-lib": "2.13.0",
+      "constructs": "10.0.10",
+      "@types/aws-lambda": "8.10.85",
+      "source-map-support": "0.5.16",
+      "openai": "2.0.4"
+    },
+    "resolutions": {
+      "table": "6.7.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -4,12 +4,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rimraf packages/infrastructure/dist/ && lerna run build",
+    "build": "rimraf packages/**/dist/ && lerna run build",
     "clean": "lerna run clean",
     "install": "lerna run install",
     "watch": "lerna run watch --stream",
     "test": "lerna run test --",
-    "cdk": "yarn --cwd packages/infrastructure cdk",
+    "cdk": "yarn --cwd packages/pipeline cdk",
     "deploy": "yarn build && yarn cdk synth && yarn cdk deploy --require-approval never",
     "dev": "yarn --cwd packages/application dev"
   },

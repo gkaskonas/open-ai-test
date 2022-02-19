@@ -7,7 +7,7 @@ import { StringParameter } from "aws-cdk-lib/aws-ssm";
 /**
  * A stack for our simple Lambda-powered web service
  */
-export class OpenAIStack extends Stack {
+export class OpenAIApplication extends Stack {
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);

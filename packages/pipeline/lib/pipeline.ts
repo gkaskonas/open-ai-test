@@ -26,6 +26,7 @@ import { Role } from "aws-cdk-lib/aws-iam";
 
 function getPipeline(scope: Stack): Pipeline {
   const sourceOutput = new Artifact();
+  const buildOutput = new Artifact();
 
   const buildProject = new PipelineProject(scope, "build", {
     buildSpec: BuildSpec.fromObject({
@@ -52,8 +53,38 @@ function getPipeline(scope: Stack): Pipeline {
       computeType: ComputeType.SMALL,
       buildImage: LinuxBuildImage.STANDARD_5_0,
     },
-    role: Role.fromRoleArn(scope, "pipelineRole", "arn:aws:iam::269065460843:role/portfolioPipeline-PipelineUpdatePipelineSelfMutati-VUFYWAW94ECJ")
-  
+    role: Role.fromRoleArn(
+      scope,
+      "pipelineRole",
+      "arn:aws:iam::269065460843:role/portfolioPipeline-PipelineUpdatePipelineSelfMutati-VUFYWAW94ECJ"
+    ),
+  });
+
+  const buildAppProject = new PipelineProject(scope, "buildApp", {
+    buildSpec: BuildSpec.fromObject({
+      version: "0.2",
+      phases: {
+        install: {
+          commands: ["npm install -g aws-cdk"],
+        },
+        build: {
+          commands: [
+            "yarn install",
+            "yarn build",
+            "yarn cdk synth",
+            "cp -r node_modules packages/application/dist/lambda/",
+          ],
+        },
+      },
+      artifacts: {
+        "base-directory": "packages/**/**",
+        files: "**/*",
+      },
+    }),
+    environment: {
+      computeType: ComputeType.SMALL,
+      buildImage: LinuxBuildImage.STANDARD_5_0,
+    },
   });
 
   const stackName = "openai";
@@ -97,8 +128,21 @@ function getPipeline(scope: Stack): Pipeline {
           }),
         ],
       },
+      {
+        stageName: "buildApp",
+        actions: [
+          new CodeBuildAction({
+            actionName: "build",
+            project: buildAppProject,
+            input: sourceOutput,
+            runOrder: 2,
+            type: CodeBuildActionType.BUILD,
+            outputs: [buildOutput],
+          }),
+        ],
+      },
     ],
-    restartExecutionOnUpdate: true
+    restartExecutionOnUpdate: true,
   });
 
   pipeline.addStage({
@@ -109,13 +153,16 @@ function getPipeline(scope: Stack): Pipeline {
         adminPermissions: false,
         changeSetName,
         stackName,
-        templatePath: sourceOutput.atPath(
+        templatePath: buildOutput.atPath(
           "packages/infrastructure/cdk.out/ai-infra.template.json"
         ),
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
         runOrder: 1,
-        cfnCapabilities: [CfnCapabilities.NAMED_IAM, CfnCapabilities.AUTO_EXPAND],
+        cfnCapabilities: [
+          CfnCapabilities.NAMED_IAM,
+          CfnCapabilities.AUTO_EXPAND,
+        ],
         role: Role.fromRoleArn(
           scope,
           "changeSetRole",
@@ -143,11 +190,10 @@ function getPipeline(scope: Stack): Pipeline {
     ],
   });
 
-
   return pipeline;
 }
 
-export class WebsitePipelineStack extends Stack {
+export class OpenAIPipeline extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
