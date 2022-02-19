@@ -1,43 +1,110 @@
 import { Construct } from "constructs";
-import { ComputeType, LinuxBuildImage } from "aws-cdk-lib/aws-codebuild";
-import { Stack, StackProps } from "aws-cdk-lib";
+
+import { SecretValue, Stack, StackProps } from "aws-cdk-lib";
 import {
-  CodePipeline,
-  CodePipelineSource,
-  ShellStep,
-} from "aws-cdk-lib/pipelines";
-import { BackendStage } from "./stages/backendStage";
+  Artifact,
+  Pipeline,
+} from "aws-cdk-lib/aws-codepipeline";
+import { CloudFormationCreateReplaceChangeSetAction, CloudFormationExecuteChangeSetAction, CodeBuildAction, CodeBuildActionType, GitHubSourceAction } from "aws-cdk-lib/aws-codepipeline-actions";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import { BuildSpec, ComputeType, LinuxBuildImage, PipelineProject } from "aws-cdk-lib/aws-codebuild";
 import { TargetAccounts, TargetRegions } from "./utils/environments";
+import { Key } from "aws-cdk-lib/aws-kms";
 
 /**
  * The stack that defines the application pipeline
  */
 
-function getPipeline(scope: Stack): CodePipeline {
-  return new CodePipeline(scope, "Pipeline", {
-    // The pipeline name
-    pipelineName: "openai-pipeline",
+function getPipeline(scope: Stack): Pipeline {
 
-    // How it will be built and synthesized
-    synth: new ShellStep("Synth", {
-      // Where the source can be found
-      input: CodePipelineSource.connection("gkaskonas/open-ai-test", "main", {
-        connectionArn: `arn:aws:codestar-connections:${scope.region}:${scope.account}:connection/a4848827-92c7-4203-b816-81ec422b6c26`,
-      }),
+  const sourceOutput = new Artifact();
 
-      // Install dependencies, build and run cdk synth
-      commands: ["yarn install", "yarn build", "cp -r node_modules packages/infrastructure/lib/lambda/", "yarn cdk synth"],
-      primaryOutputDirectory: "packages/infrastructure/cdk.out",
-    }),
-    crossAccountKeys: true,
-    codeBuildDefaults: {
-      buildEnvironment: {
-        computeType: ComputeType.SMALL,
-        buildImage: LinuxBuildImage.STANDARD_5_0,
-
+  const buildProject = new PipelineProject(scope, "build", {
+    buildSpec: BuildSpec.fromObject({
+      version: '0.2',
+      phases: {
+        install: {
+          commands: [
+            "npm install -g aws-cdk"
+          ]
+        },
+        build: {
+          commands:[
+            "yarn install",
+            "yarn build",
+            "yarn cdk synth",
+            "yarn cdk deploy --all --require-approval=never --verbose"
+          ],
+        },
       },
-    },
-  });
+    }),
+    environment: {
+      computeType: ComputeType.SMALL,
+      buildImage: LinuxBuildImage.STANDARD_5_0
+    }
+  })
+
+  const stackName = 'openai';
+  const changeSetName = 'StagedChangeSet';
+
+  const pipeline = new Pipeline(scope, "Pipeline", {
+    pipelineName: "openai-pipeline",
+    artifactBucket: Bucket.fromBucketAttributes(scope, "artifacts", {
+      bucketName: "portfoliopipeline-pipelineartifactsbucketaea9a052-3wbgbw9b3fc1",
+      encryptionKey: Key.fromKeyArn(scope, "key", "arn:aws:kms:eu-west-1:269065460843:key/724fcf2e-7a9f-4a27-ac44-7ccf8afb66de")
+    }),
+    
+    crossAccountKeys: true,
+    stages: [{
+      stageName: "Source",
+      actions: [
+        new GitHubSourceAction({
+          actionName: 'GitHub_Source',
+          owner: 'gkaskonas',
+          repo: 'open-ai-test',
+          oauthToken: SecretValue.secretsManager('github-access'),
+          output: sourceOutput,
+          branch: 'main', // default: 'master'
+        })]},
+        {
+          stageName: "SelfMutate",
+          actions: [
+            new CodeBuildAction({
+              actionName: 'build',
+              project: buildProject,
+              input: sourceOutput,
+              runOrder: 2,
+              type: CodeBuildActionType.BUILD,
+            })
+          ]
+        }]})
+
+
+        pipeline.addStage({
+          stageName: "deployDev",
+          actions:[
+            new CloudFormationCreateReplaceChangeSetAction({
+              actionName: "deployDev",
+              adminPermissions: true,
+              changeSetName,
+              stackName,
+             templatePath: sourceOutput.atPath("packages/infrastructure/cdk.out/"),
+             account: TargetAccounts.DEV,
+             region: TargetRegions.EUROPE,
+             runOrder: 1
+            }),
+            new CloudFormationExecuteChangeSetAction({
+              actionName: "execute",
+              changeSetName,
+              stackName,
+             account: TargetAccounts.DEV,
+             region: TargetRegions.EUROPE,
+             runOrder: 2
+            })
+          ],
+        })
+
+  return pipeline
 }
 
 export class WebsitePipelineStack extends Stack {
@@ -45,19 +112,7 @@ export class WebsitePipelineStack extends Stack {
     super(scope, id, props);
 
 
-    // This is where we add the application stages
-
-    const webDev = new BackendStage(this, "webDev", {
-      env: {
-        account: TargetAccounts.DEV,
-        region: TargetRegions.EUROPE,
-      },
-    });
-
-    const pipeline = getPipeline(this);
-
-
-    pipeline.addStage(webDev);
+    getPipeline(this);
 
   }
 }
