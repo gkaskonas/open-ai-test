@@ -71,8 +71,8 @@ function getPipeline(scope: Stack): Pipeline {
           commands: [
             "yarn install",
             "yarn build",
-            "yarn cdk synth",
             "cp -r node_modules packages/application/dist/lambda/",
+            "yarn cdk synth",
           ],
         },
       },
