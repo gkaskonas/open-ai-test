@@ -149,9 +149,7 @@ function getPipeline(scope: Stack): Pipeline {
         adminPermissions: false,
         changeSetName,
         stackName,
-        templatePath: buildOutput.atPath(
-          "packages/application/cdk.out/ai-app.template.json"
-        ),
+        templatePath: buildOutput.atPath("ai-app.template.json"),
         account: TargetAccounts.DEV,
         region: TargetRegions.EUROPE,
         runOrder: 1,
