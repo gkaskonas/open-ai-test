@@ -1,5 +1,6 @@
 node_modules
 *.d.ts
 *.js
-packages/infrastructure/cdk.out/*
-packages/infrastructure/dist/*
+
+**/**/cdk.out/*
+**/**/dist/*
