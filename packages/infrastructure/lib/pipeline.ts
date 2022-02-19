@@ -33,7 +33,7 @@ function getPipeline(scope: Stack): Pipeline {
             "yarn install",
             "yarn build",
             "yarn cdk synth",
-            "yarn cdk deploy --all --require-approval=never --verbose"
+            "yarn cdk deploy ai-pipeline-v2 --require-approval=never --verbose"
           ],
         },
       },
