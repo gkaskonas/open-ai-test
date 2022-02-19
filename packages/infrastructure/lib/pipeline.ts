@@ -98,6 +98,7 @@ function getPipeline(scope: Stack): Pipeline {
         ],
       },
     ],
+    restartExecutionOnUpdate: true
   });
 
   pipeline.addStage({
@@ -118,6 +119,11 @@ function getPipeline(scope: Stack): Pipeline {
         role: Role.fromRoleArn(
           scope,
           "changeSetRole",
+          "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1"
+        ),
+        deploymentRole: Role.fromRoleArn(
+          scope,
+          "csDeployRole",
           "arn:aws:iam::404319983256:role/cdk-hnb659fds-deploy-role-404319983256-eu-west-1"
         ),
       }),
