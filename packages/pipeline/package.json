@@ -9,8 +9,8 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/jest": "27.0.3",
-    "@types/node": "16.11.12",
+    "@types/jest": "27.5.2",
+    "@types/node": "16.18.126",
     "@typescript-eslint/eslint-plugin": "5.4.0",
     "@typescript-eslint/parser": "5.3.1",
     "aws-cdk": "2.13.0",
@@ -27,7 +27,7 @@
     "aws-sdk": "2.1027.0",
     "aws-cdk-lib": "2.13.0",
     "constructs": "10.0.10",
-    "@types/aws-lambda": "8.10.85",
+    "@types/aws-lambda": "8.10.162",
     "source-map-support": "0.5.16",
     "openai": "2.0.4"
   },
