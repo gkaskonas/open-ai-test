@@ -32,6 +32,6 @@
     "openai": "2.0.4"
   },
   "resolutions": {
-    "table": "6.7.5"
+    "table": "6.9.0"
   }
 }

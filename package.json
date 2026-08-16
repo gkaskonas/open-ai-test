@@ -17,7 +17,7 @@
     "packages/*"
   ],
   "resolutions": {
-    "table": "6.7.5"
+    "table": "6.9.0"
   },
   "dependencies": {
     "aws-cdk-lib": "2.13.0",
